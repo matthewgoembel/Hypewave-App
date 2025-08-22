@@ -1,0 +1,99 @@
+{
+  "expo": {
+    "name": "Hypewave AI",
+    "slug": "hypewave-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icons/app-icon.png",
+    "scheme": "hypewaveapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.hypewave.ai",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.415344757321-c0750ntklu231n4tjn24tv050c3le688"
+        }
+      },
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.hypewave.app",
+      "googleServicesFile": "./google-services.json",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "hypewaveapp",
+              "host": "*",
+              "pathPrefix": "/"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/icons/assistant.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ],
+      "expo-secure-store",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icons/notification-icon.png",
+          "color": "#0EA5E9",
+          "defaultChannel": "news",
+          "sounds": [
+            "./assets/fx/notify.wav"
+          ]
+        }
+      ]
+    ],
+    "notification": {
+      "iosDisplayInForeground": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "271d53d7-77df-488f-8f90-d3e7664e1287"
+      },
+      "auth": {
+        "google": {
+          "iosClientId": "415344757321-c0750ntklu231n4tjn24tv050c3le688.apps.googleusercontent.com",
+          "expoClientId": "415344757321-5gg965r5p0nql5hbjh4utqukhbcv7vd7.apps.googleusercontent.com"
+        }
+      }
+    },
+    "owner": "hypewaveai"
+  }
+}
