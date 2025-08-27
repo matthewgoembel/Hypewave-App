@@ -60,7 +60,6 @@ export async function enableNotificationsFlow(): Promise<{ granted: boolean; tok
 
   // Save Expo push token locally (hook to your backend later)
   
-  // ...
   const projectId =
     (Constants.expoConfig?.extra as any)?.eas?.projectId ??
     (Constants as any)?.easConfig?.projectId;

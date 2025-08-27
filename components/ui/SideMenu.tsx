@@ -9,6 +9,8 @@ import {
   Alert,
   Dimensions,
   Image,
+  Platform,
+  Share,
   StyleSheet,
   Switch,
   Text,
@@ -79,9 +81,16 @@ export default function SideMenu({ onClose }: { onClose: () => void }) {
     setTimeout(onClose, 200);
   };
 
+  // Close drawer, then navigate
+  const navigate = (path: string) => {
+    handleClose();
+    setTimeout(() => router.push(path), 220);
+  };
+
   const handleLogout = async () => {
     await SecureStore.deleteItemAsync('auth_token'); // matches UserContext
-    router.replace('/login');
+    handleClose();
+    setTimeout(() => router.replace('/login'), 220);
   };
 
   // 🔔 Toggle notifications
@@ -101,6 +110,12 @@ export default function SideMenu({ onClose }: { onClose: () => void }) {
       setNotificationsEnabled(prev);
       Alert.alert("Notifications", e?.message || "Could not update notifications.");
     }
+  };
+
+  // Open external URL after closing menu
+  const openAfterClose = (url: string) => {
+    handleClose();
+    setTimeout(() => Linking.openURL(url), 220);
   };
 
   return (
@@ -132,7 +147,7 @@ export default function SideMenu({ onClose }: { onClose: () => void }) {
           {!isGuest && (
             <TouchableOpacity
               style={styles.accountBtnRight}
-              onPress={() => router.push('/account')}
+              onPress={() => navigate('/account')}
               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             >
               <Text style={styles.accountBtnText}>Account</Text>
@@ -172,18 +187,40 @@ export default function SideMenu({ onClose }: { onClose: () => void }) {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Others</Text>
 
-          <TouchableOpacity style={styles.prefRow} onPress={() => router.push('/help-center')}>
+          <TouchableOpacity style={styles.prefRow} onPress={() => navigate('/help-center')}>
             <Text style={styles.prefLabel}>Help Center</Text>
             <Text style={styles.prefValue}>{">"}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.prefRow}>
+          <TouchableOpacity
+            style={styles.prefRow}
+            onPress={() => {
+              const url = Platform.select({
+                ios: "itms-apps://apps.apple.com/app/id0000000000?action=write-review", // TODO: replace with real App Store ID
+                android: "market://details?id=com.hypewave.app",
+                default: "https://hypewaveai.com",
+              })!;
+              openAfterClose(url);
+            }}
+          >
             <Text style={styles.prefLabel}>Rate the Hypewave App</Text>
             <Text style={styles.prefValue}>{">"}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.prefRow}>
-            <Text style={styles.prefLabel}>Shared the Hypewave App</Text>
+          <TouchableOpacity
+            style={styles.prefRow}
+            onPress={async () => {
+              handleClose();
+              setTimeout(async () => {
+                try {
+                  await Share.share({
+                    message: "Trade like a pro today, with Hypewave AI. Check it out: https://hypewaveai.com",
+                  });
+                } catch {}
+              }, 220);
+            }}
+          >
+            <Text style={styles.prefLabel}>Share the Hypewave App</Text>
             <Text style={styles.prefValue}>{">"}</Text>
           </TouchableOpacity>
         </View>
@@ -192,28 +229,28 @@ export default function SideMenu({ onClose }: { onClose: () => void }) {
         <View style={styles.socialRow}>
           <TouchableOpacity
             style={styles.socialIcon}
-            onPress={() => Linking.openURL("https://hypewaveai.com")}
+            onPress={() => openAfterClose("https://hypewaveai.com")}
           >
             <Image source={require("@/assets/icons/web.png")} style={styles.socialImage} />
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.socialIcon}
-            onPress={() => Linking.openURL("https://x.com/hypewave_ai")}
+            onPress={() => openAfterClose("https://x.com/hypewave_ai")}
           >
             <Image source={require("@/assets/icons/x.png")} style={styles.socialImage} />
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.socialIcon}
-            onPress={() => Linking.openURL("https://discord.gg/4Se7DnvY")}
+            onPress={() => openAfterClose("https://discord.gg/4Se7DnvY")}
           >
             <Image source={require("@/assets/icons/discord.png")} style={styles.socialImage} />
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.socialIcon}
-            onPress={() => Linking.openURL("https://t.me/hypewaveai")}
+            onPress={() => openAfterClose("https://t.me/hypewaveai")}
           >
             <Image source={require("@/assets/icons/telegram_icon.png")} style={styles.socialImage} />
           </TouchableOpacity>
@@ -223,7 +260,10 @@ export default function SideMenu({ onClose }: { onClose: () => void }) {
         {isGuest ? (
           <TouchableOpacity
             style={[styles.logoutBtn, { backgroundColor: "#3ABEFF" }]}
-            onPress={() => router.replace('/login')}
+            onPress={() => {
+              handleClose();
+              setTimeout(() => router.replace('/login'), 220);
+            }}
           >
             <Text style={[styles.logoutText, { color: "#000" }]}>Log In to Unlock Features</Text>
           </TouchableOpacity>

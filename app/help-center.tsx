@@ -1,192 +1,177 @@
 // app/help-center.tsx
-import MainHeader from "@/components/ui/MainHeader";
+import { Ionicons } from "@expo/vector-icons";
 import * as Linking from "expo-linking";
 import { useRouter } from "expo-router";
 import React from "react";
 import {
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
-// TODO: paste your real links here
-const PRIVACY_URL = "https://www.hypewaveai.com/privacy";
-const TERMS_URL = "https://www.hypewaveai.com/terms";
-const RISK_URL = "https://www.hypewaveai.com/risk";
-// Contact options
+const PRIVACY_URL   = "https://www.hypewaveai.com/privacy";
+const TERMS_URL     = "https://www.hypewaveai.com/terms";
+const RISK_URL      = "https://www.hypewaveai.com/risk";
 const SUPPORT_EMAIL = "support@hypewaveai.com";
-const DISCORD_URL = "https://discord.gg/7HkPdRVS";
-const TELEGRAM_URL = "https://t.me/hypewaveai";
+const SUPPORT_URL   = "https://www.hypewaveai.com/support";
+const DISCORD_URL   = "https://discord.gg/7HkPdRVS";
+const TELEGRAM_URL  = "https://t.me/hypewaveai";
+const STATUS_URL    = "https://status.hypewaveai.com";
+const BILLING_URL   = "https://www.hypewaveai.com/pricing";
+const DEVELOPER_EMAIL="developer@hypewaveai.com";
 
 export default function HelpCenterScreen() {
   const router = useRouter();
-
-  const open = (url: string) => Linking.openURL(url);
+  const open  = (url: string) => Linking.openURL(url);
   const email = (addr: string) => Linking.openURL(`mailto:${addr}`);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#0b214e" }}>
-      {/* Reuse your global header so spacing matches other screens */}
-      <MainHeader
-        title="Help Center"
-        showBack
-        onBackPress={() => router.back()}
-        // If your MainHeader expects different props, adjust accordingly
-      />
+    <SafeAreaView style={styles.container}>
+      {/* Match Account header (back button + centered title) */}
+      <TouchableOpacity
+        onPress={() => router.back()}
+        hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+        style={styles.backBtn}
+      >
+        <Ionicons name="arrow-back" size={20} color="white" />
+      </TouchableOpacity>
 
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.subtitle}>
-          Everything legal & support in one place.
-        </Text>
+      <Text style={styles.title}>Help Center</Text>
 
+      <ScrollView contentContainerStyle={styles.scroll}>
         {/* Legal */}
-        <Text style={styles.sectionTitle}>Legal</Text>
-        <View style={styles.cardRow}>
-          <HelpCard
-            title="Privacy Policy"
-            desc="How we collect, use, and protect your data."
-            onPress={() => open(PRIVACY_URL)}
-          />
-          <HelpCard
-            title="Terms of Service"
-            desc="Your rights and responsibilities using Hypewave."
-            onPress={() => open(TERMS_URL)}
-          />
-          <HelpCard
-            title="Risk Disclosure"
-            desc="Important info on market risk & limitations."
-            onPress={() => open(RISK_URL)}
-          />
+        <View style={styles.card}>
+          <Text style={styles.sectionHeader}>Legal</Text>
+          <Row label="Privacy Policy" onPress={() => open(PRIVACY_URL)} />
+          <Row label="Terms of Service" onPress={() => open(TERMS_URL)} />
+          <Row label="Risk Disclosure" onPress={() => open(RISK_URL)} isLast />
         </View>
 
-        {/* Contact / Support */}
-        <Text style={[styles.sectionTitle, { marginTop: 16 }]}>Support</Text>
-        <View style={styles.cardRow}>
-          <HelpCard
-            title="Email Support"
-            desc="Get help from our team."
+        {/* Support */}
+        <View style={styles.card}>
+          <Text style={styles.sectionHeader}>Support</Text>
+          <Row
+            label="Email Support"
+            value="Email us"
+            valueTint="#3ABEFF"
             onPress={() => email(SUPPORT_EMAIL)}
-            cta="Email us"
           />
-          <HelpCard
-            title="Discord"
-            desc="Join the community & get help."
-            onPress={() => open(DISCORD_URL)}
+          <Row
+            label="Email Developer"
+            value="Email us"
+            valueTint="#3ABEFF"
+            onPress={() => email(DEVELOPER_EMAIL)}
           />
-          <HelpCard
-            title="Telegram"
-            desc="Real-time updates & support."
-            onPress={() => open(TELEGRAM_URL)}
-          />
+          <Row label="Help" onPress={() => open(BILLING_URL)} />
+          <Row label="Billing & Subscriptions" onPress={() => open(BILLING_URL)} />
+          <Row label="Discord" onPress={() => open(DISCORD_URL)} />
+          <Row label="Telegram" onPress={() => open(TELEGRAM_URL)} />
         </View>
 
-        <Text style={styles.footerNote}>
-          © {new Date().getFullYear()} Hypewave AI • Last updated{" "}
-          {new Date().toLocaleDateString()}
-        </Text>
+        {/* Footer (match Account) */}
+        <View style={styles.footer}>
+          <Image
+            source={require('@/assets/icons/assistant.png')}
+            style={{ width: 72, height: 72, marginBottom: 10 }}
+          />
+          <Text style={{ color: '#ccc', fontSize: 16 }}>Hypewave AI</Text>
+          <Text style={{ color: '#444', fontSize: 10 }}>
+            © {new Date().getFullYear()} Hypewave AI • Updated {new Date().toLocaleDateString()}
+          </Text>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-function HelpCard({
-  title,
-  desc,
-  cta = "Open",
+function Row({
+  label,
+  value = '>',
+  valueTint = '#ffffffcc',
+  isLast = false,
   onPress,
 }: {
-  title: string;
-  desc: string;
-  cta?: string;
+  label: string;
+  value?: string;
+  valueTint?: string;
+  isLast?: boolean;
   onPress: () => void;
 }) {
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.9}>
-      <View style={styles.cardAccent} />
-      <Text style={styles.cardTitle}>{title}</Text>
-      <Text style={styles.cardDesc}>{desc}</Text>
-      <View style={styles.cardBtn}>
-        <Text style={styles.cardBtnText}>{cta}</Text>
-        <Text style={styles.cardBtnArrow}>›</Text>
-      </View>
+    <TouchableOpacity
+      style={[styles.row, isLast && { borderBottomWidth: 0 }]}
+      onPress={onPress}
+      activeOpacity={0.85}
+    >
+      <Text style={styles.label}>{label}</Text>
+      <Text style={[styles.value, { color: valueTint }]}>{value}</Text>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-    paddingBottom: 32,
+    backgroundColor: '#00163a',
+    flex: 1,
+    paddingTop: 78,
+    paddingHorizontal: 24,
   },
-  subtitle: {
-    color: "#cfe8ff",
-    fontSize: 13,
-    marginBottom: 10,
+  backBtn: {
+    position: 'absolute',
+    top: 72,
+    left: 24,
+    backgroundColor: '#00163a',
+    borderRadius: 20,
+    padding: 8,
+    zIndex: 50,
+    elevation: 8,
   },
-  sectionTitle: {
-    color: "#ffffffcc",
-    fontSize: 14,
-    marginBottom: 8,
+  title: {
+    color: 'white',
+    fontSize: 22,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: 30,
+    marginTop: 16,
   },
-  cardRow: {
-    gap: 12,
+  scroll: {
+    paddingBottom: 40,
   },
   card: {
-    backgroundColor: "#102a5a",
-    borderRadius: 14,
-    padding: 14,
-    borderWidth: 1,
-    borderColor: "#1e2a47",
-  },
-  cardAccent: {
-    position: "absolute",
-    right: -40,
-    top: -40,
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: "rgba(58,190,255,0.18)", // #3ABEFF glow
-  },
-  cardTitle: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "700",
-    marginBottom: 4,
-  },
-  cardDesc: {
-    color: "#d6e6ff",
-    fontSize: 13,
-    marginBottom: 10,
-  },
-  cardBtn: {
-    alignSelf: "flex-start",
-    backgroundColor: "#3ABEFF",
+    backgroundColor: '#0b214e',
+    borderRadius: 16,
     paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 10,
-    flexDirection: "row",
-    alignItems: "center",
+    paddingTop: 10,
+    paddingBottom: 2,
+    marginHorizontal: 20,
+    borderColor: '#3ABEFF',
+    borderWidth: 1,
+    marginBottom: 18,
   },
-  cardBtnText: {
-    color: "#00121d",
-    fontWeight: "700",
-    fontSize: 13,
+  sectionHeader: {
+    color: '#ffffffcc',
+    fontSize: 12,
+    marginBottom: 2,
+    paddingHorizontal: 8,
+    paddingTop: 2,
   },
-  cardBtnArrow: {
-    color: "#00121d",
-    fontWeight: "900",
-    fontSize: 16,
-    marginLeft: 6,
-    marginTop: -1,
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 8,
+    borderBottomColor: '#1e2a47',
+    borderBottomWidth: 1,
   },
-  footerNote: {
-    color: "#8fb6ff",
-    fontSize: 11,
+  label: { color: 'white', fontSize: 14 },
+  value: { color: '#ffffffcc', fontSize: 14 },
+  footer: {
     marginTop: 18,
-    textAlign: "center",
-    opacity: 0.9,
+    alignItems: 'center',
   },
 });

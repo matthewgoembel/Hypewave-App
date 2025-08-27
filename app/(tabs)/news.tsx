@@ -105,27 +105,6 @@ export default function NewsScreen() {
     }
   }, []);
 
-  const getAvatarUrl = (item: NewsItem) => {
-    // accept a few possible keys just in case
-    const raw =
-      item.avatar_url ??
-      (item as any).avatar ??
-      (item as any).profile_image ??
-      null;
-
-    if (!raw) return null;
-
-    // use your existing resolver to handle /media/... relative paths
-    let url = resolveUrl(raw) || raw;
-
-    // Android blocks http by default — upgrade to https if needed
-    if (url.startsWith("http://")) url = url.replace("http://", "https://");
-
-    // light cache-buster so avatar refreshes when channel changes it
-    const bust = item.timestamp ? `${url.includes("?") ? "&" : "?"}_=${encodeURIComponent(item.timestamp)}` : "";
-    return `${url}${bust}`;
-  };
-
 
   useEffect(() => {
     (async () => {

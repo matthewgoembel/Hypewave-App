@@ -67,6 +67,7 @@
         }
       ],
       "expo-secure-store",
+      "expo-apple-authentication",
       [
         "expo-notifications",
         {
@@ -77,7 +78,8 @@
             "./assets/fx/notify.wav"
           ]
         }
-      ]
+      ],
+      "expo-video"
     ],
     "notification": {
       "iosDisplayInForeground": true
