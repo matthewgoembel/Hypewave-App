@@ -461,11 +461,11 @@ export default function AccountScreen() {
       {/* Footer */}
       <View style={styles.footer}>
         <Image
-          source={require('@/assets/icons/assistant.png')}
-          style={{ width: 72, height: 72, marginBottom: 10 }}
+          source={require('@/assets/icons/signals.png')}
+          style={{ width: 200, height: 200, marginBottom: -10, marginTop: -20 }}
         />
-        <Text style={{ color: '#ccc', fontSize: 16 }}>Hypewave AI</Text>
-        <Text style={{ color: '#444', fontSize: 10 }}>© {new Date().getFullYear()} Hypewave AI</Text>
+        <Text style={{ color: '#ccc', fontSize: 24, marginBottom: 10 }}>Hypewave AI</Text>
+        <Text style={{ color: '#444', fontSize: 12 }}>© {new Date().getFullYear()} Hypewave AI</Text>
       </View>
     </View>
   );
@@ -536,7 +536,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   footer: {
-    marginTop: 50,
+    marginTop: 100,
     alignItems: 'center',
   },
   pwRow: {

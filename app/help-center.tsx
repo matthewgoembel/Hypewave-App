@@ -76,9 +76,9 @@ export default function HelpCenterScreen() {
         <View style={styles.footer}>
           <Image
             source={require('@/assets/icons/assistant.png')}
-            style={{ width: 72, height: 72, marginBottom: 10 }}
+            style={{ width: 160, height: 160, marginBottom: -20 }}
           />
-          <Text style={{ color: '#ccc', fontSize: 16 }}>Hypewave AI</Text>
+          <Text style={{ color: '#ccc', fontSize: 20, marginBottom: 10 }}>Hypewave AI</Text>
           <Text style={{ color: '#444', fontSize: 10 }}>
             © {new Date().getFullYear()} Hypewave AI • Updated {new Date().toLocaleDateString()}
           </Text>
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   label: { color: 'white', fontSize: 14 },
   value: { color: '#ffffffcc', fontSize: 14 },
   footer: {
-    marginTop: 18,
+    marginTop: 60,
     alignItems: 'center',
   },
 });

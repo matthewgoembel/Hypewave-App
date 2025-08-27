@@ -276,10 +276,10 @@ export default function SideMenu({ onClose }: { onClose: () => void }) {
         {/* Footer */}
         <View style={styles.footer}>
           <Image
-            source={require("@/assets/icons/assistant.png")}
-            style={{ width: 155, height: 155, marginBottom: 0, marginTop: 0 }}
+            source={require("@/assets/icons/menu-icon.png")}
+            style={{ width: 200, height: 155, marginBottom: 0, marginTop: -10 }}
           />
-          <Text style={{ color: "#ccc", fontSize: 19, marginBottom: 4 }}>Hypewave AI</Text>
+          <Text style={{ color: "#ccc", fontSize: 19, marginBottom: 4, marginTop: 10 }}>Hypewave AI</Text>
           <Text style={{ color: "#444", fontSize: 10 }}>© 2025 Hypewave AI</Text>
         </View>
       </Animated.View>
@@ -405,7 +405,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   footer: {
-    marginTop: 20,
+    marginTop: 60,
     alignItems: "center",
   },
 });
